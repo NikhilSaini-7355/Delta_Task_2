@@ -25,3 +25,133 @@
 #obstacle{
     display: none;
 }
+#zombie1{
+    display: none;
+}
+#zombie1-1{
+    display: none;
+}
+#zombie2{
+    display: none;
+}
+#wall{
+    display: none;
+}
+#weaponIcon{
+    display: none;
+}
+#zombie_attack{
+    display: none;
+}
+#zombie_dead{
+    display: none;
+}
+#zombie_idle{
+    display: none;
+}
+#zombie_jump{
+    display: none;
+}
+#zombie_run{
+    display: none;
+}
+#zombie_walk{
+    display: none;
+}
+
+
+#zombie_attack2{
+    display: none;
+}
+#zombie_dead2{
+    display: none;
+}
+#zombie_idle2{
+    display: none;
+}
+#zombie_jump2{
+    display: none;
+}
+#zombie_run2{
+    display: none;
+}
+#zombie_walk2{
+    display: none;
+}
+
+#Survivor_Attack{
+    display: none;
+}
+#Survivor_Dead{
+    display: none;
+}
+#Survivor_Idle{
+    display: none;
+}
+#Survivor_Jump{
+    display: none;
+}
+#Survivor_Run{
+    display: none;
+}
+#Survivor_Throw{
+    display: none;
+}
+
+#Survivor_Attack2{
+    display: none;
+}
+#Survivor_Dead2{
+    display: none;
+}
+#Survivor_Idle2{
+    display: none;
+}
+#Survivor_Jump2{
+    display: none;
+}
+#Survivor_Run2{
+    display: none;
+}
+#Survivor_Throw2{
+    display: none;
+}
+
+#Kunai{
+    display: none;
+}
+
+#Sword{
+    display: none;
+}
+#Grenade{
+    display: none;
+}
+#ShotGun{
+    display: none;
+}
+#MachineGun{
+    display: none;
+}
+#jetPack{
+    display: none;
+}
+#Bullet1{
+    display: none;
+}
+#Bullet2{
+    display: none;
+    /* background-color: transparent; */
+}
+#LandMine{
+    display : none;
+}
+#BearTrap{
+    display: none;
+}
+#canonGun{
+    display: none;
+}
+#spikes{
+    display: none;
+}
