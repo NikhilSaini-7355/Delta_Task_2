@@ -1,5 +1,4 @@
-// wiring for synchronization is very much needed 
-// wiring for synchronization is very much required 
+
 class LastStand_Game{
     constructor(canvas,context)
     {
