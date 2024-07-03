@@ -38,12 +38,17 @@ class LastStand_Game{
        this.touchStartX;
        this.swipeDistance = 50;
        this.isPaused = false;
+       this.pauseImage = document.getElementById('pause');
+       this.playImage = document.getElementById('play');
+       this.leaderboardImage = document.getElementById('leaderboard');
+       this.heartImage = document.getElementById('heart');
        this.isPreparationPhaseActive = false;
        // detecting swipes left from the tutorial
        this.preparationPhase = new PreparationPhase(this);
        this.survivor = new Survivor(this);
        this.resize(window.innerWidth,window.innerHeight);
        this.weapons = new Weapon(this);
+       this.menu = new Menu(this);
        this.ammunitions = [];
        this.checkResize();
        // mouseevents
@@ -58,6 +63,9 @@ class LastStand_Game{
 
             const x = e.clientX ;
             const y = e.clientY ;
+
+
+
 
             if(this.weapons.isWeaponListShown == false)
                 {   // console.log("hey1 ");
@@ -99,7 +107,70 @@ class LastStand_Game{
                               this.weapons.selectedWeapon = 4; ///////////////lklklkkjkj
                         }
                 }
-            
+
+
+            if(this.isPreparationPhaseActive == false)
+                {
+                if(this.menu.isMenuListShown == false)
+                    {   // console.log("hey1 ");
+                         if(x>this.canvas.width-a*0.045 && x<this.canvas.width && y>b*0.40 && y<b*0.60)
+                            {
+                                this.menu.isMenuListShown = true;
+                                console.log("hello11");   
+                            }
+                    }
+                else if(this.menu.isMenuListShown == true )
+                    {  
+                        if(x>a-a*0.045 && x<a && y>b*0.4 && y<b*0.6)
+                            {
+                                this.menu.isMenuListShown = false;
+                                console.log("hello12");
+                            }
+                        else if(x>a+a*0.005 && x<a*0.09 * 0.9 + a*0.005+a && y>b*0.15 && y<b*0.80/5 * 0.9 + b*0.15)
+                            {   
+                                  this.menu.selectedOption = 0;
+                                  this.menu.update();
+                            }
+                        else if(x>a+a*0.005 + a*0.09*0.3 && x<a+a*0.005 + a*0.09*0.3 + a*0.09 * 0.4  && y>b*0.15+b*0.80*1/5 && y<b*0.15+b*0.80*1/5 +b*0.80/5 * 0.9)
+                            {   
+                                  this.menu.selectedOption = 1;
+                                  this.menu.update();
+                            }
+                        else if(x>a+a*0.005 && x<a+a*0.005+ a*0.09 && y>b*0.15+b*0.80*2/5 && y<b*0.80/5 * 0.9 + b*0.15+b*0.80*2/5)
+                            {      
+                                  this.menu.selectedOption = 2;
+                                  this.menu.update();
+                            }
+                        else if(x>a+a*0.005 && x<a+a*0.09 +  a*0.005 && y>b*0.15+b*0.80*3/5 && y<b*0.15+b*0.80*3/5 + b*0.80/5 * 0.9)
+                            {    
+                                  this.menu.selectedOption = 3;
+                                  this.menu.update();
+                            }
+                        else if(x>a+a*0.005 && x<a+a*0.005+a*0.09  && y>b*0.15+b*0.80*4/5 && y<b*0.15+b*0.80*4/5 + b*0.80/5 * 0.9)
+                            {     
+                                  this.menu.selectedOption = 4; 
+                                  this.menu.update();
+                            }
+                    }
+                }
+
+            if(x>=950 && x<=1000 && y>=10 && y<=60)
+                {
+                      if(this.isPaused == true)
+                        {
+                            this.isPaused = false;
+                        }
+                    else {
+                        this.isPaused = true;
+                    }
+                }
+            if(x>=1050 && x<=1100 && y>=10 && y<=60)
+                {
+                     console.log("show leaderboard");
+                }
+
+
+
             if(this.isSurvivorAttacking == true)
                 {
                     this.weapons.mousePosition = this.getMousePosition(e);
@@ -247,12 +318,15 @@ class LastStand_Game{
         });
         }
         this.ammunitions.forEach((ammunition)=>{
-            
             ammunition.draw();
             ammunition.update();
         })
         this.weapons.update();
         this.weapons.draw();
+        if(this.isPreparationPhaseActive == false)
+            {
+                this.menu.draw();
+            }
     }
     checkResize()
     {
@@ -372,8 +446,9 @@ class LastStand_Game{
     }
     leaderboard()
     {
-
+         
     }
+
     checkCollisionWithDefenseBlock(player)
     {   
         let foundBlock = null;
@@ -385,14 +460,10 @@ class LastStand_Game{
                 {   
                    if(player.x - defenseBlock.x <= defenseBlock.scaledWidth+60*this.ratio && player.y+player.scaledHeight == defenseBlock.y+defenseBlock.scaledHeight && player.x > defenseBlock.x)
                     {   
-                        // player.isJumping = true;
-                        // alert("hello1"+defenseBlock.x)
                         foundBlock =  defenseBlock;
                     }
                     else if(defenseBlock.x - player.x <= player.scaledWidth+60*this.ratio && player.y+player.scaledHeight == defenseBlock.y+defenseBlock.scaledHeight && defenseBlock.x > player.x) 
                         {   
-                            // player.isJumping = true;
-                            // alert("hello2"+defenseBlock.x)
                             foundBlock = defenseBlock;
                         }
                     else if(player.y + player.scaledHeight <= defenseBlock.y && (player.x - defenseBlock.x <= defenseBlock.scaledWidth || defenseBlock.x - player.x <= player.scaledWidth))
@@ -406,14 +477,10 @@ class LastStand_Game{
                         {   
                             if(defenseBlock.x - player.x <= 60*this.ratio+player.scaledWidth + 0.5*defenseBlock.scaledWidth && player.y+player.scaledHeight == defenseBlock.y+defenseBlock.scaledHeight && defenseBlock.x > player.x) 
                                 {   
-                                    // player.isJumping = true;
-                                    // alert("hello3"+defenseBlock.x)
                                     foundBlock = defenseBlock;
                                 }
                             else if(player.x - defenseBlock.x <= 60*this.ratio+1*defenseBlock.scaledWidth && player.y+player.scaledHeight == defenseBlock.y+defenseBlock.scaledHeight && player.x > defenseBlock.x )
                                 {   
-                                    // player.isJumping = true;
-                                    // alert("hello4"+defenseBlock.x)
                                     foundBlock = defenseBlock;
                                 }
                         }
@@ -421,14 +488,10 @@ class LastStand_Game{
                         {   
                             if(player.x - defenseBlock.x <= 60*this.ratio+1.5*defenseBlock.scaledWidth && player.y+player.scaledHeight == defenseBlock.y+defenseBlock.scaledHeight && player.x > defenseBlock.x)
                                 {  
-                                    // player.isJumping = true;
-                                    // alert("hello5"+defenseBlock.x)
                                     foundBlock = defenseBlock;
                                 }
                             else if(defenseBlock.x - player.x <= 60*this.ratio+player.scaledWidth && player.y+player.scaledHeight == defenseBlock.y+defenseBlock.scaledHeight && defenseBlock.x > player.x)
                                 {   
-                                    // player.isJumping = true;
-                                    // alert("hello6"+defenseBlock.x)
                                     foundBlock = defenseBlock;
                                 }
                         }
@@ -479,14 +542,6 @@ class LastStand_Game{
         // order matter in dev and html canvas
         if(this.gameOver == true)
             {
-                // if(this.survivor.collided == true)
-                //     {
-                        
-                //     }
-                // else if(this.obstacles.length <= 0)
-                //     {
-                        
-                //     }
                 this.context.textAlign = "center";
                 this.context.font = this.largeFont+"px Permanent Marker";
                 this.context.fillText(this.message1,this.width*0.5,this.height*0.5 -this.largeFont,this.width);
@@ -514,10 +569,23 @@ class LastStand_Game{
                  this.context.fillText("PREPARATION PHASE",10,60);
              }
         this.context.fillStyle = "Blue";
+        this.context.drawImage(this.heartImage,500,0,50,50);
         for(let i=0;i<this.survivor.health;i++)
             {
-                this.context.fillRect(500+10+i*this.survivor.barSize*2,40, this.survivor.barSize, this.survivor.barSize * 5);
+                this.context.fillRect(500+10+i*this.survivor.barSize*2,50, this.survivor.barSize, this.survivor.barSize * 5);
             }
+        
+        if(this.isPaused == false)
+            {
+                this.context.drawImage(this.pauseImage,950,10,50,50)
+            }
+            else
+            {
+                this.context.drawImage(this.playImage,950,10,50,50)
+            }
+
+        this.context.drawImage(this.leaderboardImage,1050,10,50,50)
+        
         this.context.restore();
     }
     triggerGameOver()
@@ -618,9 +686,107 @@ class LastStand_Game{
 }
 
 class Menu{
-    constructor()
+    constructor(game)
     {
+        this.game = game;
+        this.MenuArray = [{
+                                "optionName" : "Grenade",
+                                "Image" : document.getElementById("firstAid"),
+                                "spriteWidth" : 1,
+                                "spriteHeight" : 2,
+                             },{
+                                "optionName" : "Grenade",
+                                "Image" : document.getElementById("immunity"),
+                                "spriteWidth" : 1,
+                                "spriteHeight" : 2,
+                               },
+                            {
+                                "optionName" : "Grenade",
+                                "Image" : document.getElementById("charge"),
+                                "spriteWidth" : 1,
+                                "spriteHeight" : 2,
+                            },{
+                                "optionName" : "Grenade",
+                                "Image" : document.getElementById("jetpack"),
+                                "spriteWidth" : 1,
+                                "spriteHeight" : 2,
+                            },{
+                                "optionName" : "Grenade",
+                                "Image" : document.getElementById("Grenade"),
+                                "spriteWidth" : 1,
+                                "spriteHeight" : 2,
+                            }]
+        this.isMenuListShown = false;
+        this.MenuIcon = document.getElementById("menuIcon");
+        this.selectedOption = -1;
+    }
+    update()
+    {
+        if(this.selectedOption == 0)
+            {
+                 console.log("option0");
+                 this.game.survivor.healthPack();
+            }
+        else if(this.selectedOption == 1)
+            {
+                console.log("option1");
+                 this.game.survivor.immunity();
+            }
+        else if(this.selectedOption == 2)
+            {
+                console.log("option2");
+                this.game.survivor.startCharge();
 
+            }
+        else if(this.selectedOption == 3)
+            {
+                console.log("option3");
+                this.game.survivor.applyJetPack();
+
+            }
+        else if(this.selectedOption == 4)
+            {
+                console.log("option4")
+            }
+    }
+    draw()
+    {
+        if(this.isMenuListShown == false)
+            {   let a = this.game.canvas.width * this.game.ratio;
+                let b = this.game.canvas.height ;
+                this.game.context.beginPath();
+                this.game.context.moveTo(this.game.canvas.width,b * 0.4);
+                this.game.context.bezierCurveTo(this.game.canvas.width-a*0.07,b*0.5,this.game.canvas.width-a*0.07,b*0.5,this.game.canvas.width,b*0.6);
+                this.game.context.drawImage(this.MenuIcon,this.game.canvas.width-a*0.045,b*0.45,a*0.045,b*0.1)
+                this.game.context.stroke();
+            }
+        else
+            {   let a = this.game.canvas.width * this.game.ratio;
+                let b = this.game.canvas.height;
+                this.game.context.beginPath();
+                this.game.context.roundRect(a,b*0.15,a*0.1,b*0.80,[10,10,10,10]);
+                this.game.context.roundRect(a+a*0.005,b*0.15,a*0.09,b*0.80/5,[10,10,10,10]);
+                this.game.context.drawImage(this.MenuArray[0]["Image"],a+a*0.009 ,b*0.15,a*0.09 * 0.9,b*0.80/5 * 0.9);
+                this.game.context.roundRect(a+a*0.005,b*0.15+b*0.80*1/5,a*0.09,b*0.80/5,[10,10,10,10]);
+                this.game.context.drawImage(this.MenuArray[1]["Image"],a+a*0.005,b*0.15+b*0.80*1/5,a*0.09 ,b*0.80/5 * 0.9);
+                this.game.context.roundRect(a+a*0.005,b*0.15+b*0.80*2/5,a*0.09,b*0.80/5,[10,10,10,10]);
+                this.game.context.drawImage(this.MenuArray[2]["Image"],a+a*0.005 ,b*0.15+b*0.80*2/5,a*0.09 ,b*0.80/5 * 0.9);
+                this.game.context.roundRect(a+a*0.005,b*0.15+b*0.80*3/5,a*0.09,b*0.80/5,[10,10,10,10]);
+                this.game.context.drawImage(this.MenuArray[3]["Image"],a+a*0.005 ,b*0.15+b*0.80*3/5,a*0.09 ,b*0.80/5 * 0.9);
+                this.game.context.roundRect(a+a*0.005,b*0.15+b*0.80*4/5,a*0.09,b*0.80/5,[10,10,10,10]);
+                this.game.context.drawImage(this.MenuArray[4]["Image"],a+a*0.005 ,b*0.15+b*0.80*4/5,a*0.09 ,b*0.80/5 * 0.9);
+                this.game.context.stroke();
+                this.game.context.beginPath();
+                this.game.context.moveTo(a,b * 0.4);
+                this.game.context.bezierCurveTo(a-a*0.07,b*0.5,a-a*0.07,b*0.5,a,b*0.6);
+                this.game.context.drawImage(this.MenuIcon,a-a*0.045,b*0.45,a*0.045,b*0.1)
+                this.game.context.stroke();
+            }
+    }
+    resize()
+    {
+        this.isWeaponListShown = false;
+        this.selectedOption = -1;
     }
 }
 class PreparationPhase
@@ -716,12 +882,14 @@ class Survivor{
         this.jetPackImage = document.getElementById("jetPack");
 
         this.powerUpArray = [{
-            "name" : "charge"
-        }, {
-            "name" : "healthPack"
+            "name" : "healthPack",
+            "chances" : 3,
          },{
-            "name" : "Immunity"
-         }];
+            "name" : "Immunity",
+            "chances" : 3,
+         },{
+            "name" : "charge"
+        }];
         
         this.SurvivorSpriteAnimations = {
             "idle" : {
@@ -835,9 +1003,6 @@ class Survivor{
         {
         if(this.survivorDirection == "left")
             {
-                //  this.image = this.SurvivorSpriteAnimations[this.survivorState].Image2;
-                //  this.spriteWidth = this.SurvivorSpriteAnimations[this.survivorState].spriteWidth ;
-                //  this.spriteHeight = this.SurvivorSpriteAnimations[this.survivorState].spriteHeight;
                  let totalFrames  =  this.SurvivorSpriteAnimations[this.survivorState].numberOfFrames;
                  if(this.survivorState == "dead" && this.frameX == 9)
                     {
@@ -848,9 +1013,6 @@ class Survivor{
               }
          else if(this.survivorDirection == "right")
              {
-                //  this.image = this.SurvivorSpriteAnimations[this.survivorState].Image;
-                //  this.spriteWidth = -this.SurvivorSpriteAnimations[this.survivorState].spriteWidth ;
-                //  this.spriteHeight = this.SurvivorSpriteAnimations[this.survivorState].spriteHeight;
                  let totalFrames  =  this.SurvivorSpriteAnimations[this.survivorState].numberOfFrames;
                  this.frameX = (this.frameX+1)%totalFrames;
                  this.frameStartX = this.frameX*this.spriteWidth;
@@ -1083,13 +1245,27 @@ class Survivor{
        }        
     }
     healthPack()
-    {
+    {     
+        if(this.powerUpArray[0]["chances"]>0)
+            {
+                this.powerUpArray[0]["chances"] -= 1;
+            }
+            else {
+                return;
+            }
          if(this.health < this.maxHealth)
             {
                 this.health = this.maxHealth;
             }
     }
     immunity(){
+        if(this.powerUpArray[1]["chances"]>0)
+            {
+                this.powerUpArray[1]["chances"] -= 1;
+            }
+            else {
+                return;
+            }
         this.isImmune = true;
         setTimeout(()=>{
             this.isImmune = false;
@@ -1859,8 +2035,6 @@ class Weapon{
         this.scaledWidth = this.spriteWidth * this.game.ratio ;
         this.scaledHeight = this.spriteHeight * this.game.ratio ;
         this.canFire = false;
-
-
         this.mousePosition = {
             x : 0,
             y : 0
@@ -1945,7 +2119,7 @@ class Weapon{
         this.velX = this.velocity * Math.cos(this.angle);
         this.velY = this.velocity * Math.sin(this.angle);
         this.time = this.velY/this.game.gravity;
-        this.Xpos = this.startX + this.time*this.velX;
+        this.Xpos = this.startX +  this.time*this.velX;  // some issue maybe
         this.Ypos = this.startY - (this.velY*this.velY)/(2*this.game.gravity);
         
         }
@@ -1956,7 +2130,26 @@ class Weapon{
         // {
         //     this.drawPath(this.WeaponArray[this.selectedWeapon]["weaponName"]);
         // }
-        
+        if(this.selectedWeapon == 0)
+            {
+
+            }
+        else if(this.selectedWeapon == 1)
+            {
+
+            }
+        else if(this.selectedWeapon == 2)
+            {
+                
+            }
+        else if(this.selectedWeapon == 3)
+            {
+                
+            }
+        else if(this.selectedWeapon == 4)
+            {
+                
+            }
         if(this.game.isSurvivorAttacking == true)
             {
         this.game.context.setLineDash([5,3]);
@@ -2466,6 +2659,8 @@ window.addEventListener('load',function() {
     }
     this.requestAnimationFrame(animate);
 })
+
+
 
 
 

@@ -155,3 +155,31 @@
 #spikes{
     display: none;
 }
+#heart{
+    display: none;
+}
+#pause{
+    display: none;
+}
+#play{
+    display: none;
+}
+#leaderboard{
+    display: none;
+}
+
+#firstAid{
+    display: none;
+}
+#immunity{
+    display: none;
+}
+#charge{
+    display: none;
+}
+#jetpack{
+    display: none;
+}
+#menuIcon{
+    display: none;
+}
